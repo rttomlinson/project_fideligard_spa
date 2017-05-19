@@ -3,6 +3,21 @@ import moment from "moment";
 export const FETCH_STOCKS_SUCCESS = "FETCH_STOCKS_SUCCESS";
 export const FETCH_STOCKS_REQUEST = "FETCH_STOCKS_REQUEST";
 export const FETCH_STOCKS_FAILURE = "FETCH_STOCKS_FAILURE";
+export const SET_TICKER_FILTER = "SET_TICKER_FILTER";
+export const CHANGE_TICKER_ORDER = "CHANGE_TICKER_ORDER";
+
+export function changeTickerOrder() {
+    return {
+        type: CHANGE_TICKER_ORDER
+    };
+}
+
+export function setTickerFilter(data) {
+    return {
+        type: SET_TICKER_FILTER,
+        data
+    };
+}
 
 export function fetchStocksSuccess(data) {
     return {
@@ -26,11 +41,10 @@ export function fetchStocksRequest() {
 
 export function fetchStocks(date) {
     date = date ? date : moment().subtract(1, "day").format("YYYYMMDD");
-    console.log("date", date);
     return dispatch => {
         dispatch(fetchStocksRequest());
 
-        fetch(`api/quandl/stocks/${date}`)
+        fetch(`/api/quandl/stocks/${date}`)
             .then(checkStatus)
             .then(json => {
                 dispatch(fetchStocksSuccess(json));

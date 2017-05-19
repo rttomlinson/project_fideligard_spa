@@ -26,13 +26,15 @@ app.get("/api/quandl/stocks/:date", (req, res, next) => {
     let day_7 = date.clone().subtract(7, "day");
     let day_30 = date.clone().subtract(30, "day");
 
+
     let correctedDates = [day_0, day_1, day_7, day_30].map(date => {
-        console.log("date", date);
         if (date.day() === 0) {
             return date.subtract(2, "day").format("YYYYMMDD");
-        } else if (date.day() === 6) {
+        }
+        else if (date.day() === 6) {
             return date.subtract(1, "day").format("YYYYMMDD");
-        } else {
+        }
+        else {
             return date.format("YYYYMMDD");
         }
     });
@@ -49,9 +51,7 @@ app.get("/api/quandl/stocks/:date", (req, res, next) => {
         })
         .then(stocksArray => {
             if (!stocksArray[0].datatable.data.length) {
-                throw new Error(
-                    "Quandl does not have info available on this day. Recommend trying a weekday"
-                );
+                throw new Error("Quandl does not have info available on this day. Recommend trying a weekday");
             }
             // stock = {
             //     Day0Price: Number,

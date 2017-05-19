@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 
 
 const Dashboard = ({ children, history }) => {
-    console.log("history obj", history);
   let options = [
     { value: "trade", text: "Trade" },
     { value: "transactions", text: "Transactions" },
