@@ -1,22 +1,22 @@
 import { ADD_CASH, SUBTRACT_CASH } from '../actions/cashAction.js';
 
 const INITIAL_STATE = {
-    cash: 100000,
+    amount: 100000,
     error: null,
     message: null
 };
 
-export default function cash(state = INITIAL_STATE, action) {
+export function cashReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case ADD_CASH:
             return {
                 ...state,
                 message: "Cash added",
                 error: null,
-                cash: state.cash + action.data
+                amount: state.amount + action.data
             };
         case SUBTRACT_CASH:
-            if (state.cash - action.data < 0) {
+            if (state.amount - action.data < 0) {
                 return {
                     ...state,
                     message: null,
@@ -27,7 +27,7 @@ export default function cash(state = INITIAL_STATE, action) {
                 ...state,
                 message: "Cash subtracted",
                 error: null,
-                cash: state.cash - action.data
+                amount: state.amount - action.data
             };
         default:
             return state;

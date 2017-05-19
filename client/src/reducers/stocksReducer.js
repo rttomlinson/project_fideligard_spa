@@ -28,7 +28,7 @@ const initialState = {
     sort: true
 };
 
-export function stocks(state = initialState, action) {
+export function stocksReducer(state = initialState, action) {
     switch (action.type) {
         case CHANGE_TICKER_ORDER:
             return {

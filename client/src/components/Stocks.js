@@ -12,7 +12,7 @@ function makeStockRows(stocks) {
         <td>{stock.day_1 ? currencyFormatter.format(+stock.day_0 - +stock.day_1, { code: "USD"}) : "N/A"}</td>
         <td>{stock.day_7 ? currencyFormatter.format(+stock.day_0 - +stock.day_7, { code: "USD"}) : "N/A"}</td>
         <td>{stock.day_30 ? currencyFormatter.format(+stock.day_0 - +stock.day_30, { code: "USD"})  : "N/A"}</td>
-        <td><NavLink to={`/trade/${stock.symbol}`}>trade</NavLink></td>
+        <td><NavLink to={`/trade?symbol=${stock.symbol}`}>trade</NavLink></td>
       </tr>
     );
   });

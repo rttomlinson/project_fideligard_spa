@@ -4,12 +4,20 @@ import App from "./components/App";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import { date } from "./reducers/dateReducer";
 import { Provider } from "react-redux";
-import { stocks } from "./reducers/stocksReducer";
+//--------------------
+//Reducers
+//--------------------
+import { dateReducer as date } from "./reducers/dateReducer";
+import { stocksReducer as stocks } from "./reducers/stocksReducer";
+import { cashReducer as cash } from './reducers/cashReducer';
+import { portfolioReducer as portfolio } from './reducers/portfolioReducer';
+import { tradeReducer as trade } from './reducers/tradeReducer';
+import { transactionsReducer as transactions } from './reducers/transactionsReducer';
+//----------------------
 import thunk from "redux-thunk";
 
-let stockAppReducer = combineReducers({ date, stocks });
+let stockAppReducer = combineReducers({ date, stocks, cash, portfolio, trade, transactions });
 
 let store = createStore(stockAppReducer, applyMiddleware(thunk));
 let unsubscribe = store.subscribe(() => {

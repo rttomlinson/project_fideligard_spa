@@ -11,7 +11,7 @@ const INITIAL_STATE = {
     message: null
 };
 
-export default function portfolio(state = INITIAL_STATE, action) {
+export function portfolioReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case ADD_STOCKS:
             return {
@@ -34,7 +34,6 @@ export default function portfolio(state = INITIAL_STATE, action) {
                     message: null
                 };
             }
-            
             if (state.stocks[action.data.symbol] - action.data.amount < 0) {
                 return {
                     ...state,
@@ -50,7 +49,7 @@ export default function portfolio(state = INITIAL_STATE, action) {
                 },
                 message: "Stocks subtracted",
                 error: null
-            }
+            };
         default:
             return state;
     }

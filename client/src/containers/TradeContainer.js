@@ -7,37 +7,98 @@ import {
 }
 from "react-redux";
 import Trade from "../components/Trade";
-import { withRouter } from 'react-router-dom';
+import {
+    withRouter
+}
+from 'react-router-dom';
+import qs from "qs";
+//-----Import trade actions
+import {
+    changeTradeQuantity,
+    changeTradeType
+}
+from '../actions/tradeAction';
+import {addTransaction} from '../actions/transactionsAction';
 
+class TradeContainer extends Component {
+    constructor() {
+        super()
 
-class TradeContainer extends Component{
-    
-    
-    componentWillReceiveProps(newProps) {
-        
+        // this.state = {
+        //     quantity: 0,
+        //     isValid: true,
+        //     typeOfTrade: 'buy'
+        // };
     }
-    
-    
+
+    // componentWillReceiveProps(newProps) {
+    //     setValidation(newPropsprice, quantity, cash, type, stockQuantity)
+
+    // }
+
+    // changeTypeOfTrade = (type) => {
+    //     this.setState({
+    //         typeOfTrade: type
+    //     });
+
+    // }
+
+    // changeQuantity = (num) => {
+    //     this.setState({
+    //         quantity: num
+    //     });
+    // }
+
+
     render() {
+
         return (
-            <Trade {...this.props}/>    
+            <Trade {...this.props}/>
         );
     }
 }
 
 function mapStateToProps(state, ownProps) {
+    let symbols = getSymbols(state.stocks.data)
+    let symbol = qs.parse(ignoreQuestionMark(ownProps.location.search)).symbol || symbols[0];
+    let cash = state.cash.amount;
+    let price = state.stocks.data.length ? state.stocks.data.find((stock) => {
+        return stock.symbol === symbol;
+    })["day_0"] : 0
+    let stocksQuantity = state.portfolio.stocks[symbol] || 0;
+    let type = state.trade.type;
+    let quantity = state.trade.quantity;
+    let validationObj = buildValidationObj(price, quantity, cash, type, stocksQuantity);
     return {
-        symbol: ownProps.match.params.symbol,
-        symbols: getSymbols(state.stocks.data)
+        symbol,
+        symbols,
+        cash,
+        price,
+        stocksQuantity,
+        type,
+        quantity,
+        validationObj
     };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
     return {
-        changeTradeForm: (symbol) => {
-            ownProps.history.push(`/trade/${symbol}`);
+        onChangeTradeForm: (symbol) => {
+            ownProps.history.push(`/trade?symbol=${symbol}`);
+        },
+        onChangeTradeQuantity: (value) => {
+            dispatch(changeTradeQuantity(+value));
+        },
+        onChangeTradeType: (type) => {
+            dispatch(changeTradeType(type));
+        },
+        onTradeSubmit: (formData) => {
+            //add transaction to the list
+            dispatch(addTransaction(formData));
+            //modify cash
+            //modify portfolio
         }
-    }
+    };
 }
 
 
@@ -48,4 +109,33 @@ function getSymbols(stocks) {
     return stocks.map(stock => {
         return stock.symbol;
     });
+}
+
+
+function ignoreQuestionMark(qs) {
+    if (qs[0] === '?') {
+        return qs.slice(1);
+    }
+    return qs;
+}
+
+
+function buildValidationObj(price, quantity, cash, type, stocksQuantity) {
+    //If order is not valid, find out why
+    if ((price * quantity) > cash && type === 'buy') {
+        return {
+            isValid: false,
+            message: <span className="text-danger">You don't have enough money</span>
+        }
+    }
+    else if (quantity > stocksQuantity && type === 'sell') {
+        return {
+            isValid: false,
+            message: <span className="text-danger">You don't have enough of that stock</span>
+        }
+    }
+    return {
+        isValid: true,
+        message: <span className="text-success">Order is valid</span>
+    }
 }

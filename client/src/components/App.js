@@ -29,7 +29,7 @@ class App extends Component {
                   <Switch>
                     <Route path="/transactions" component={Transactions} />
                     <Route path="/portfolio" component={Portfolio} />
-                    <Route path="/trade/:symbol" component={TradeContainer} />
+                    <Route exact path="/trade" component={TradeContainer} />
                     <Redirect exact from="/" to="/trade" />
                     <Route render={() => <h1>Page Not Found</h1>} />
                   </Switch>

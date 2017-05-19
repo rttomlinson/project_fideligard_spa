@@ -9,7 +9,7 @@ const moment = require("moment");
 
 const QUANDL_API_KEY = process.env.QUANDL_API_KEY;
 
-app.set("port", 8081 || process.env.PORT || 3001);
+app.set("port", process.env.PORT || 3001);
 
 function checkStatus(response) {
     // If response not okay, throw an error

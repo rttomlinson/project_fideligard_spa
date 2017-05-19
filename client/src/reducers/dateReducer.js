@@ -4,7 +4,7 @@ import moment from 'moment';
 let initialDate = moment().subtract(1, 'day').format("YYYY-MM-DD");
 
 
-export function date(state = initialDate, action) {
+export function dateReducer(state = initialDate, action) {
   switch (action.type) {
     case CHANGE_DATE:
       return action.data;
